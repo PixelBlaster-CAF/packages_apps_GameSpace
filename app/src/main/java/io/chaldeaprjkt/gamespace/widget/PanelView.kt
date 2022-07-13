@@ -16,20 +16,20 @@
 package io.chaldeaprjkt.gamespace.widget
 
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.os.BatteryManager
+import android.os.SystemProperties
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.TextView
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.view.doOnLayout
 import io.chaldeaprjkt.gamespace.R
 import io.chaldeaprjkt.gamespace.utils.dp
 import io.chaldeaprjkt.gamespace.utils.isPortrait
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import kotlin.math.max
 import kotlin.math.min
 
@@ -49,16 +49,34 @@ class PanelView @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         applyRelativeLocation()
-        batteryTemperature()
+        cpuTemperature()
     }
 
-    private fun batteryTemperature() {
-        val intent: Intent =
-            context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))!!
-        val temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0).toInt() / 10
+    private fun getCpuTemperature(): Float {
+        val process: Process
+        val prop = SystemProperties.get("ro.pb.cpu_no")
+        return try {
+            process = Runtime.getRuntime().exec("cat sys/class/thermal/thermal_zone$prop/temp")
+            process.waitFor()
+            val reader = BufferedReader(InputStreamReader(process.inputStream))
+            val line: String = reader.readLine()
+            if (line != null) {
+                val temp = line.toFloat()
+                temp / 1000.0f
+            } else {
+                51.0f
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0.0f
+        }
+    }
+
+    private fun cpuTemperature() {
+        val temp = getCpuTemperature()
         val degree = "\u2103"
-        val batteryTemp:TextView = findViewById(R.id.batteryTemp)
-        batteryTemp.text = "$temp$degree"
+        val cpuTemp:TextView = findViewById(R.id.cpuTemp)
+        cpuTemp.text = "$temp$degree"
     }
 
     private fun applyRelativeLocation() {

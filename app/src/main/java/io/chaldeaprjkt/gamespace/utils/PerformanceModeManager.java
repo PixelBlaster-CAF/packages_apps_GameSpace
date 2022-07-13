@@ -2,7 +2,7 @@ package io.chaldeaprjkt.gamespace.utils;
 
 import android.util.BoostFramework;
 public class PerformanceModeManager {
-    private static final String PACKAGE_NAME = "com.qualcomm.qti.performancemode";
+    private static final String PACKAGE_NAME = "io.chaldeaprjkt.gamespace";
     private static final int PERFORMANCE_MODE_BOOST_ID = 4241;
     private static final String PROP_PERFORMANCE_MODE_SUPPORT = "vendor.perf.performancemode.support";
     private static final String TAG = PerformanceModeManager.class.getSimpleName();

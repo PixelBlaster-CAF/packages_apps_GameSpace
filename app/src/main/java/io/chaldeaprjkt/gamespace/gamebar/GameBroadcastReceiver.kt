@@ -21,7 +21,11 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.os.UserHandle
-
+import io.chaldeaprjkt.gamespace.utils.PerformanceModeManager
+import io.chaldeaprjkt.gamespace.utils.SharedPreferenceUtils.getPerformanceModeStatus
+import io.chaldeaprjkt.gamespace.utils.SharedPreferenceUtils.getSessionHandle
+import io.chaldeaprjkt.gamespace.utils.SharedPreferenceUtils.setPerformanceModeStatus
+import io.chaldeaprjkt.gamespace.utils.SharedPreferenceUtils.setSessionHandle
 
 class GameBroadcastReceiver : BroadcastReceiver() {
     private val handler by lazy { Handler(Looper.getMainLooper()) }
@@ -40,6 +44,15 @@ class GameBroadcastReceiver : BroadcastReceiver() {
 
     private fun Context.onGameStop(intent: Intent) {
         handler.post { resendBroadcast(intent) }
+        val handle = getSessionHandle(this)
+        if (-1 == handle) {
+        } else if (-1 != PerformanceModeManager.getInstance()
+                .turnOffPerformanceMode(handle)
+        ) {
+            setSessionHandle(this, -1)
+            setPerformanceModeStatus(this, false)
+        } else {
+        }
         SessionService.stop(this)
     }
 

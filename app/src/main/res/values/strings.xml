@@ -36,6 +36,7 @@
     <string name="game_mode_performance">Performance</string>
     <string name="game_mode_battery">Battery</string>
 
+    <string name="auto_brightness_title">Auto Brightness</string>
     <string name="heads_up_title">Heads up</string>
     <string name="fps_Info_title">FPS info</string>
     <string name="stay_awake_title">Stay awake</string>

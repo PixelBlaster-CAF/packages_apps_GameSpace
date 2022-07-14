@@ -15,7 +15,12 @@
  */
 package io.chaldeaprjkt.gamespace.widget
 
+import android.content.ContentResolver
 import android.content.Context
+import android.database.ContentObserver
+import android.net.Uri
+import android.os.Handler
+import android.provider.Settings
 import android.os.SystemProperties
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -23,6 +28,8 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.LinearLayout
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.core.view.doOnLayout
 import io.chaldeaprjkt.gamespace.R
@@ -32,6 +39,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import kotlin.math.max
 import kotlin.math.min
+
 
 class PanelView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -50,6 +58,7 @@ class PanelView @JvmOverloads constructor(
         super.onAttachedToWindow()
         applyRelativeLocation()
         cpuTemperature()
+        brightnessSlider()
     }
 
     private fun getCpuTemperature(): Float {
@@ -77,6 +86,45 @@ class PanelView @JvmOverloads constructor(
         val degree = "\u2103"
         val cpuTemp:TextView = findViewById(R.id.cpuTemp)
         cpuTemp.text = "$temp$degree"
+    }
+
+    private fun brightnessSlider() {
+        var lightBar:SeekBar = findViewById(R.id.seekBar);
+        var brightness = Settings.System.getInt(
+            context.contentResolver,
+            Settings.System.SCREEN_BRIGHTNESS, 0
+        )
+        lightBar.setProgress(brightness)
+        val contentResolver: ContentResolver = context.contentResolver
+        val setting: Uri = Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS)
+
+        val observer: ContentObserver = object : ContentObserver(Handler()) {
+            override fun onChange(selfChange: Boolean) {
+                super.onChange(selfChange)
+                var brightness1 = Settings.System.getInt(
+                    context.contentResolver,
+                    Settings.System.SCREEN_BRIGHTNESS, 0
+                )
+                lightBar.setProgress(brightness1)
+            }
+
+            override fun deliverSelfNotifications(): Boolean {
+                return true
+            }
+        }
+        contentResolver.registerContentObserver(setting, false, observer)
+
+        lightBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                Settings.System.putInt(
+                    context.contentResolver,
+                    Settings.System.SCREEN_BRIGHTNESS, progress
+                )
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
     }
 
     private fun applyRelativeLocation() {

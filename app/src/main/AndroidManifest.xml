@@ -16,7 +16,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="io.chaldeaprjkt.gamespace"
+    package="com.blaster.gamespace"
     android:sharedUserId="android.uid.system">
 
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -65,8 +65,8 @@
             android:exported="true"
             android:permission="android.permission.MANAGE_GAME_MODE">
             <intent-filter>
-                <action android:name="io.chaldeaprjkt.gamespace.action.GAME_START" />
-                <action android:name="io.chaldeaprjkt.gamespace.action.GAME_STOP" />
+                <action android:name="com.blaster.gamespace.action.GAME_START" />
+                <action android:name="com.blaster.gamespace.action.GAME_STOP" />
             </intent-filter>
         </receiver>
     </application>

@@ -63,7 +63,7 @@
                     android:textSize="14sp"
                     android:textColor="?android:attr/textColorPrimaryInverse" />
 
-                 <io.chaldeaprjkt.gamespace.widget.MemoryView
+                 <com.blaster.gamespace.widget.MemoryView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
@@ -84,7 +84,7 @@
                     android:drawablePadding="2dp"
                     android:textSize="14sp" />
 
-                <io.chaldeaprjkt.gamespace.widget.BatteryView
+                <com.blaster.gamespace.widget.BatteryView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"

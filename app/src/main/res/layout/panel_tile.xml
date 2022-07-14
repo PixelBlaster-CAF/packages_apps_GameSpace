@@ -27,6 +27,7 @@
         android:id="@+id/tile_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_gravity="center"
         android:src="@drawable/ic_search"
         android:tint="?android:attr/textColorPrimaryInverse" />
 
@@ -41,6 +42,8 @@
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
+        android:gravity="center"
+        android:singleLine="true"
         android:text="@string/app_search_title"
         android:textSize="9sp" />
 
@@ -51,6 +54,7 @@
         android:alpha="0.7"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
+        android:gravity="center"
         android:singleLine="true"
         android:text="@string/app_search_title"
         android:textSize="7sp" />

@@ -99,11 +99,23 @@
 
             <include layout="@layout/tiles" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/ic_action_auto_brightness" />
             <SeekBar
                 android:id="@+id/seekBar"
+                android:progressDrawable="@drawable/ic_seekbar_style"
+                android:thumb="@null"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+            </LinearLayout>
 
 
         </LinearLayout>

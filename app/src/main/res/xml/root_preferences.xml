@@ -69,6 +69,12 @@
             android:key="gamespace_adb_disabled"
             android:title="@string/adb_disabled_title" />
 
+        <com.blaster.support.preference.SecureSettingSwitchPreference
+            android:key="games_device_spoof"
+            android:title="@string/games_device_spoof_title"
+            android:summary="@string/games_device_spoof_summary"
+            android:defaultValue="false"/>
+
         <com.blaster.support.preference.CustomSeekBarPreference
             android:key="gamespace_menu_opacity"
             android:title="@string/gamespace_menu_opacity_title"

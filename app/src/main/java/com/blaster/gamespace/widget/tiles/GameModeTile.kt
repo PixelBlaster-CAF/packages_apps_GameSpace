@@ -18,9 +18,9 @@ package com.blaster.gamespace.widget.tiles
 import android.app.GameManager
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import com.blaster.gamespace.R
+import com.blaster.gamespace.utils.FileUtils
 import com.blaster.gamespace.utils.GameModeUtils.Companion.describeGameMode
 import com.blaster.gamespace.utils.PerformanceModeManager
 import com.blaster.gamespace.utils.SharedPreferenceUtils.getPerformanceModeStatus
@@ -36,6 +36,11 @@ class GameModeTile @JvmOverloads constructor(
 ) : BaseTile(context, attrs) {
 
     private var mIsPerformanceModeOn = false
+
+    private val kProfilesModesNode = "/sys/module/kprofiles/parameters/kp_mode"
+
+    var currentMode = "0"
+
 
     private val gameModeUtils by lazy {
         context.entryPointOf<ServiceViewEntryPoint>().gameModeUtils()
@@ -61,6 +66,20 @@ class GameModeTile @JvmOverloads constructor(
                     setPerformanceModeStatus(this.context, true)
                     return
                 }
+                 currentMode = FileUtils.readOneLine(kProfilesModesNode).toString()
+                 appSettings.currentMode = currentMode
+                setMode("3")
+            } else if(value==3) {
+                val handle2 = getSessionHandle(this.context)
+                if (-1 == handle2) {
+                } else if (-1 != PerformanceModeManager.getInstance()
+                        .turnOffPerformanceMode(handle2)
+                ) {
+                    setSessionHandle(this.context, -1)
+                    setPerformanceModeStatus(this.context, false)
+                } else {
+                }
+                setMode("1")
             }
             else
             {
@@ -73,6 +92,7 @@ class GameModeTile @JvmOverloads constructor(
                     setPerformanceModeStatus(this.context, false)
                 } else {
                 }
+                setMode(appSettings.currentMode)
             }
         }
 
@@ -102,6 +122,10 @@ class GameModeTile @JvmOverloads constructor(
     }
     fun isPerformanceModeOn(): Boolean {
         return mIsPerformanceModeOn
+    }
+
+    private fun setMode(mode: String) {
+        FileUtils.writeLine(kProfilesModesNode, mode)
     }
 
 }

@@ -32,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.blaster.gamespace.data.AppSettings
 import com.blaster.gamespace.data.GameSession
 import com.blaster.gamespace.data.SystemSettings
+import com.blaster.gamespace.utils.FileUtils
 import com.blaster.gamespace.utils.GameModeUtils
 import com.blaster.gamespace.utils.ScreenUtils
 import kotlinx.coroutines.CoroutineScope
@@ -58,6 +59,8 @@ class SessionService : Hilt_SessionService() {
     lateinit var gameModeUtils: GameModeUtils
 
     private val scope = CoroutineScope(Job() + Dispatchers.IO)
+
+    private val kProfilesModesNode = "/sys/module/kprofiles/parameters/kp_mode"
 
     private val gameBarConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -121,7 +124,13 @@ class SessionService : Hilt_SessionService() {
         gameModeUtils.unbind()
         screenUtils.unbind()
         isRunning = false
+
+        appSettings.currentMode?.let { setMode(it) }
         super.onDestroy()
+    }
+
+    private fun setMode(mode: String) {
+        FileUtils.writeLine(kProfilesModesNode, mode)
     }
 
     private fun onGameBarReady() {
